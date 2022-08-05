@@ -1,24 +1,18 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from "react";
+import Wyszukiwarka from "./Components/Wyszukiwarka";
+import { SocketContext } from "./contexts/SocketContext";
+import io from "socket.io-client";
 
+const SERVER = "http://localhost:10000/";
 function App() {
+  const [socket, setSocket] = useState();
+  useEffect(() => {
+    setSocket(io(SERVER, { transport: ["websocket"] }));
+  }, []);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <SocketContext.Provider value={[socket]}>
+      <Wyszukiwarka />
+    </SocketContext.Provider>
   );
 }
 
